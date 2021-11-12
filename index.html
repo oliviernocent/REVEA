@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>REVEA : Pambianchi Lorenzo</title>
+    <meta name="description" content="Application A-Frame permettant de visualiser la cinématique d'un gymnaste">
+    <meta name="keywords" content="RV, A-Frame, gymnastique, cinématique">
+    <meta name="author" content="Mickaël Soudain-Pineau, Frédéric Puel, Olivier Nocent">
+
+    <!-- A-Frame JavaScript library -->
+    <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
+    <!-- zlib JavaScript library for unzipping FBX files -->
+    <script src="https://unpkg.com/zlibjs@0.3.1/bin/zlib.min.js"></script>
+    <!-- A-Frame extras -->
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+</head>
+
+<body>
+    <a-scene>
+        <a-assets>
+            <a-asset-item id="ph_legs" src="assets/pommel_horse_legs.obj">
+            </a-asset-item>
+            <a-asset-item id="ph_body" src="assets/pommel_horse_body.obj">
+            </a-asset-item>
+            <a-asset-item id="ph_handles" src="assets/pommel_horse_handles.obj">
+            </a-asset-item>
+        </a-assets>
+
+        <a-plane id="floor" rotation="-90 0 0" width="16" height="16" color="red" shadow="cast: false">
+        </a-plane>
+
+        <a-entity id="ph" position="0.11868 0.70023 -0.15225" rotation="0 -8.758232856369764 0" scale="0.01 0.01 0.01">
+            <a-obj-model src="#ph_legs" material="color: blue; roughness: 0.4; metalness: 0.6" shadow="" obj-model="">
+            </a-obj-model>
+
+            <a-obj-model src="#ph_body" material="color: orange; roughness: 1" shadow="" obj-model="" position="">
+            </a-obj-model>
+
+            <a-obj-model src="#ph_handles" material="color: white; roughness: 0" shadow="" obj-model="">
+            </a-obj-model>
+        </a-entity>
+
+        <a-entity id="gymnast" fbx-model="src: assets/PAMBIANCHI_Lorenzo_2021_07.fbx" animation-mixer="loop: repeat" scale="0.01 0.01 0.01" shadow="receive: false"></a-entity>
+
+        <a-sky id="sphere" color="#000"></a-sky>
+
+        <a-entity light="type: ambient; color: white; intensity: 0.2"></a-entity>
+        <a-entity light="type: spot; color: white; intensity: 0.7; angle: 24.79; penumbra: 1; target: #floor; castShadow: true" position="-2 4 0"></a-entity>
+        <a-entity light="color: white; intensity: 0.2; castShadow: true" position="1 -1 0"></a-entity>
+        <a-entity light="color: white; intensity: 0.2; castShadow: true" position="-1 -1 0"></a-entity>
+
+        <a-camera position="0 1.7 3"></a-camera>
+    </a-scene>
+</body>
+
+</html>
