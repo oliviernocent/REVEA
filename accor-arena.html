@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Internationaux de gymnastique</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url("assets/img/internationaux-gymnastique.jpg");
+            background-repeat: no-repeat;
+            font-family: sans-serif;
+            color: white;
+        }
+
+        div[role="main"] {
+            max-width: 900px;
+            margin: 32px auto;
+            padding-bottom: 48px;
+            background-color: #9694a9;
+            border-radius: 12px;
+        }
+
+        header {
+            margin: 0;
+            min-height: 64px;
+            border-radius: 12px 12px 0 0;
+            background-color: white;
+            background-image: url("assets/img/logo-accor-arena.svg");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        h1,
+        p {
+            padding: 16px;
+        }
+
+        button {
+            background-color: #e0b470;
+            color: white;
+            margin-right: 48px;
+            padding: 16px;
+            text-align: center;
+            font-size: 18px;
+            border-width: 0;
+            border-radius: 4px;
+        }
+
+        audio, span {
+            display: block;
+            width: 100%;
+        }
+
+        span {
+            padding-top: 8px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div role="main">
+        <header></header>
+        <div>
+            <h1>
+                Internationaux de France de gymnastique<br>
+                <small>24 & 25 septembre 2022</small>
+            </h1>
+
+            <p>
+                <button id="trigger_ambient">Ambiance</button>
+                <button id="trigger_support">Encouragements</button>
+                <button id="trigger_applause">Applaudissements</button>
+            </p>
+
+            <p>
+                <audio id="ambient_channel1" controls></audio>
+                <audio id="ambient_channel2" class="hidden" controls></audio>
+                <span></span>
+            </p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            /*
+             * Utility functions
+             *
+             */
+            function swap(list, i, j) {
+                let temp = list[i];
+                list[i] = list[j];
+                list[j] = temp;
+            }
+
+            function shuffle(list, repetitions) {
+                for (let r = 0; r < repetitions; r++) {
+                    let i = Math.floor(Math.random() * list.length);
+                    let j = Math.floor(Math.random() * list.length);
+                    swap(list, i, j);
+                }
+            }
+
+            let ambientAudioTrack = [];
+            let maxAmbientAudioTrackIndex = 30;
+            let currentAmbientAudioTrackIndex = 0;
+
+            // Initializes ambient playlist
+            for (let i = 1; i < maxAmbientAudioTrackIndex; i++)
+                if (i < 10)
+                    ambientAudioTrack.push(`assets/audio/mix/AMBIANCES COMPETITION/AMB  COMPETITION _0${i}.mp3`);
+                else
+                    ambientAudioTrack.push(`assets/audio/mix/AMBIANCES COMPETITION/AMB  COMPETITION _${i}.mp3`);
+            // Randomizes playlist order
+            shuffle(ambientAudioTrack, 100);
+            console.log(ambientAudioTrack);
+
+            let ambientAudioTrackLabel = document.querySelector('span');
+
+            let audioChannel = []
+            audioChannel.push(document.querySelector('#ambient_channel1'));
+            audioChannel.push(document.querySelector('#ambient_channel2'));
+            let currentAudioChannelIndex = 0;
+
+            let duration = 0;
+
+            audioChannel.forEach((element) => {
+                element.addEventListener('loadeddata', (event) => {
+                    duration = event.target.duration;
+                    console.log('Loaded data: duration=' + duration);
+                });
+            });
+
+            document.querySelector('#trigger_ambient').addEventListener('click', () => {
+                audioChannel[currentAudioChannelIndex].src = ambientAudioTrack[currentAmbientAudioTrackIndex];
+                audioChannel[currentAudioChannelIndex].currentTime = 200;
+                audioChannel[currentAudioChannelIndex].play();
+
+                let folder = ambientAudioTrack[currentAmbientAudioTrackIndex].split('/');
+                let trackName = folder[folder.length - 1];
+
+                ambientAudioTrackLabel.textContent = `Canal #${currentAudioChannelIndex}: ${trackName}`;
+            });
+
+            window.setInterval(() => {
+                console.log(audioChannel[currentAudioChannelIndex].currentTime + ' -> ' + duration);
+                if (duration !== 0) {
+                    if (audioChannel[currentAudioChannelIndex].currentTime >= (duration - 5)) {
+                        if (++currentAmbientAudioTrackIndex === maxAmbientAudioTrackIndex)
+                            currentAmbientAudioTrackIndex = 0;
+
+                        currentAudioChannelIndex = (++currentAudioChannelIndex) % 2;
+
+                        audioChannel[currentAudioChannelIndex].src = ambientAudioTrack[currentAmbientAudioTrackIndex];
+                        audioChannel[currentAudioChannelIndex].play();
+
+                        audioChannel[0].classList.toggle('hidden');
+                        audioChannel[1].classList.toggle('hidden');
+
+                        let folder = ambientAudioTrack[currentAmbientAudioTrackIndex].split('/');
+                        let trackName = folder[folder.length - 1];
+
+                        ambientAudioTrackLabel.textContent = `Canal #${currentAudioChannelIndex}: ${trackName}`;
+                    }
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

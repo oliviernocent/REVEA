@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>REVEA : Pambianchi Lorenzo</title>
+    <meta name="description" content="Application A-Frame permettant de visualiser la cinématique d'un gymnaste">
+    <meta name="keywords" content="RV, A-Frame, gymnastique, cinématique">
+    <meta name="author" content="Mickaël Soudain-Pineau, Frédéric Puel, Olivier Nocent">
+
+    <!-- A-Frame JavaScript library -->
+    <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
+    <!-- zlib JavaScript library for unzipping FBX files -->
+    <script src="https://unpkg.com/zlibjs@0.3.1/bin/zlib.min.js"></script>
+    <!-- A-Frame extras -->
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+</head>
+
+<body>
+    <a-scene shadow="type: pcfsoft">
+        <a-assets>
+            <a-asset-item id="ph_legs" src="assets/models/pommel_horse_legs.obj">
+            </a-asset-item>
+            <a-asset-item id="ph_body" src="assets/models/pommel_horse_body.obj">
+            </a-asset-item>
+            <a-asset-item id="ph_handles" src="assets/models/pommel_horse_handles.obj">
+            </a-asset-item>
+            <img id="concrete" src="assets/textures/concrete-256x256.jpg">
+        </a-assets>
+
+        <a-entity position="0 0 -3">
+            <a-plane id="front-wall-N" position="0 1.85 -8" width="16" height="4" material="color: #aeaeae; metalness: 0; roughness: 1" shadow="cast: false; receive: true">
+            </a-plane>
+
+            <a-plane id="back-wall-N" position="0 3.85 -10" width="20" height="8" material="color: #ffb100; metalness: 0; roughness: 1" shadow="cast: false; receive: true">
+            </a-plane>
+
+            <a-plane id="front-wall-S" position="0 1.85 8" rotation="0 180 0" width="16" height="4" material="color: #aeaeae; metalness: 0; roughness: 1" shadow="cast: false; receive: true">
+            </a-plane>
+
+            <a-plane id="back-wall-S" position="0 3.85 10" rotation="0 180 0"  width="20" height="8" material="color: #ffb100; metalness: 0; roughness: 1" shadow="cast: false; receive: true">
+            </a-plane>
+
+            <a-plane id="back-wall-E" position="10 3.85 0" rotation="0 -90 0"  width="20" height="8" material="color: #ffb100; metalness: 0; roughness: 1" shadow="cast: false; receive: true">
+            </a-plane>
+
+            <a-plane id="front-wall-E" position="8 1.85 0" rotation="0 -90 0" width="16" height="4" material="color: #aeaeae; metalness: 0; roughness: 1" shadow="cast: false; receive: true">
+            </a-plane>
+
+            <a-plane id="back-wall-W" position="-10 3.85 0" rotation="0 90 0"  width="20" height="8" material="color: #ffb100; metalness: 0; roughness: 1" shadow="cast: false; receive: true">
+            </a-plane>
+
+            <a-plane id="front-wall-W" position="-8 1.85 0" rotation="0 90 0" width="16" height="4" material="color: #aeaeae; metalness: 0; roughness: 1" shadow="cast: false; receive: true">
+            </a-plane>
+
+            <a-plane id="ceiling" position="0 7.85 0" rotation="90 0 0" width="20" height="20" material="color: white; metalness: 0; roughness: 1" shadow="cast: false; receive: true">
+            </a-plane>
+
+            <a-plane id="floor" position="0 -0.15 0" rotation="-90 0 0" width="16" height="16" src="#concrete" repeat="15 15" material="color: #aeaeae; metalness: 0; roughness: 1" shadow="cast: false; receive: true">
+            </a-plane>
+
+            <a-box id="mat" position="-0.055 -0.075 0.696" width="5" height="0.15" depth="5" material="color: #0096ff; metalness: 0.0; roughness: 0.4" shadow="cast: false; receive: true">
+            </a-box>
+
+            <!-- 
+            PAMBIANCHI_Lorenzo_2021_07.fbx    : position="0.11868 0.70023 -0.15225" rotation="0 -8.758232856369764 0"
+            PAMBIANCHI_Lorenzo_2021_11_19.fbx : position="0.022 0.815 0.774" rotation="0 -90.41 0" 
+            -->
+            <!--
+            <a-entity id="ph" position="0.022 0.815 0.774" rotation="0 -90.41 0" scale="0.01 0.01 0.01">
+                <a-obj-model src="#ph_legs" material="color: blue; roughness: 0.4; metalness: 0.6" shadow="cast: true; receive: true">
+                </a-obj-model>
+
+                <a-obj-model src="#ph_body" material="color: #ca976e; metalness: 0; roughness: 1" shadow="cast: true; receive: true">
+                </a-obj-model>
+
+                <a-obj-model src="#ph_handles" material="color: white; roughness: 0" shadow="cast: true; receive: true">
+                </a-obj-model>
+            </a-entity>
+            -->
+            
+            <a-entity id="gymnast" fbx-model="src: assets/animations/Lorenzo_Actor_Makin_4_v2.fbx" animation-mixer="loop: repeat"
+                scale="0.01 0.01 0.01" shadow="cast: true; receive: false"></a-entity>
+
+            <a-entity light="type: ambient; color: white; intensity: 0.4"></a-entity>
+            <a-entity light="type: point; color: white; intensity: 0.3; castShadow: true" position="-1 6 -1"></a-entity>
+            <!--
+            <a-entity light="type: point; color: white; intensity: 0.2; castShadow: true" position="3 6 0"></a-entity>
+            <a-entity light="type: point; color: white; intensity: 0.2; castShadow: true" position="3 6 0"></a-entity>
+            -->
+        </a-entity>
+
+        <a-camera position="0 1.7 0"></a-camera>
+    </a-scene>
+</body>
+
+</html>
